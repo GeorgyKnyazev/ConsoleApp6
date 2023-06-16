@@ -82,6 +82,10 @@ namespace ConsoleApp6
         }
         static void ModifiMap( ref char[,] map, ref int playerX, ref int playerY)
         {
+            char wallSymbol = '1';
+            char playerSymbol = '2';
+            char deleteSymbol = '3';
+            char escapeSymbol = '4';
             bool modifiMap = true;
             int cursorPositionX = 0;
             int cursorPositionY = 0;
@@ -98,10 +102,10 @@ namespace ConsoleApp6
                 Console.WriteLine("Для движения вниз   - стрелочка вниз");
                 Console.WriteLine("Для движения вправо - стрелочка вправо");
                 Console.WriteLine("Для движения влево  - стрелочка влево");
-                Console.WriteLine("Нарисовать #        - Введите   1");
-                Console.WriteLine("Нарисовать @        - Введите   2");
-                Console.WriteLine("Стереть символ      - Введите   3");
-                Console.WriteLine("Для выхода          - Введите   4");
+                Console.WriteLine($"Нарисовать #        - Введите   {wallSymbol}");
+                Console.WriteLine($"Нарисовать @        - Введите   {playerSymbol}");
+                Console.WriteLine($"Стереть символ      - Введите   {deleteSymbol}");
+                Console.WriteLine($"Для выхода          - Введите   {escapeSymbol}");
                 Console.SetCursorPosition(cursorPositionX, cursorPositionY);
 
                 ConsoleKeyInfo consoleKeyInfo = Console.ReadKey();
@@ -145,8 +149,8 @@ namespace ConsoleApp6
                         {
                             cursorPositionX--;
                         }
-                        break;
                         Console.SetCursorPosition(cursorPositionX, cursorPositionY);
+                        break;
                     case ConsoleKey.D4:
                         modifiMap = false;
                         break;
