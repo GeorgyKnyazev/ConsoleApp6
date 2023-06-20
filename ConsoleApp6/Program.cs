@@ -14,6 +14,9 @@ namespace ConsoleApp6
     {
         static void Main(string[] args)
         {
+            string editKeyInMenu = "1";
+            string gameKeyInMenu = "2";
+            string exitKeyInMenu = "3";
             bool programwork = true;
             int playerX;
             int playerY;
@@ -23,9 +26,9 @@ namespace ConsoleApp6
             while (programwork == true)
             {
                 Console.Clear();
-                Console.WriteLine("1 - Редактирование");
-                Console.WriteLine("2 - игра");
-                Console.WriteLine("3 выход");
+                Console.WriteLine($"{editKeyInMenu} - Редактирование");
+                Console.WriteLine($"{gameKeyInMenu} - игра");
+                Console.WriteLine($"{exitKeyInMenu} - выход");
                 ConsoleKeyInfo consoleKeyInfo = Console.ReadKey();
 
                 switch (consoleKeyInfo.Key)
@@ -82,10 +85,18 @@ namespace ConsoleApp6
         }
         static void ModifiMap( ref char[,] map, ref int playerX, ref int playerY)
         {
-            char wallSymbol = '1';
-            char playerSymbol = '2';
-            char deleteSymbol = '3';
-            char escapeSymbol = '4';
+            string wallKeylInMenu  = "1";
+            string playerKeyInMenu = "2";
+            string deleteKeyInMenu = "3";
+            string escapeKeyInMenu = "4";
+            string upMoveKeyInMenu = "стрелка вверх";
+            string downMoveKeyInMenu = "стрелка вниз";
+            string rightMoveKeyInMenu = "стрелка вправо";
+            string leftMoveKeyInMenu = "стрелка влево";
+            char wallSymbol = '#';
+            char playerSymbol = '@';
+            char emptySymbol = ' ';
+
             bool modifiMap = true;
             int cursorPositionX = 0;
             int cursorPositionY = 0;
@@ -98,14 +109,14 @@ namespace ConsoleApp6
                 DrawMap(map);
 
                 Console.SetCursorPosition(0, map.GetLength(0) + 1);
-                Console.WriteLine("Для движения вверх  - стрелочка вверх");
-                Console.WriteLine("Для движения вниз   - стрелочка вниз");
-                Console.WriteLine("Для движения вправо - стрелочка вправо");
-                Console.WriteLine("Для движения влево  - стрелочка влево");
-                Console.WriteLine($"Нарисовать #        - Введите   {wallSymbol}");
-                Console.WriteLine($"Нарисовать @        - Введите   {playerSymbol}");
-                Console.WriteLine($"Стереть символ      - Введите   {deleteSymbol}");
-                Console.WriteLine($"Для выхода          - Введите   {escapeSymbol}");
+                Console.WriteLine($"Для движения вверх   - {upMoveKeyInMenu}");
+                Console.WriteLine($"Для движения вниз    - {downMoveKeyInMenu}");
+                Console.WriteLine($"Для движения вправо  - {rightMoveKeyInMenu}");
+                Console.WriteLine($"Для движения влево   - {leftMoveKeyInMenu}");
+                Console.WriteLine($"Нарисовать #        - Введите   {wallKeylInMenu}");
+                Console.WriteLine($"Нарисовать @        - Введите   {playerKeyInMenu}");
+                Console.WriteLine($"Стереть символ      - Введите   {deleteKeyInMenu}");
+                Console.WriteLine($"Для выхода          - Введите   {escapeKeyInMenu}");
                 Console.SetCursorPosition(cursorPositionX, cursorPositionY);
 
                 ConsoleKeyInfo consoleKeyInfo = Console.ReadKey();
@@ -113,15 +124,15 @@ namespace ConsoleApp6
                 switch (consoleKeyInfo.Key)
                 {
                     case ConsoleKey.D1:
-                        map[cursorPositionY, cursorPositionX] = '#'; 
+                        map[cursorPositionY, cursorPositionX] = wallSymbol; 
                         break;
                     case ConsoleKey.D2:
-                        map[cursorPositionY, cursorPositionX] = '@';
+                        map[cursorPositionY, cursorPositionX] = playerSymbol;
                         playerX = cursorPositionX;
                         playerY = cursorPositionY;
                         break;
                     case ConsoleKey.D3:
-                        map[cursorPositionY, cursorPositionX] = ' ';
+                        map[cursorPositionY, cursorPositionX] = emptySymbol;
                         break;
                     case ConsoleKey.UpArrow:
                         if(cursorPositionY != 0)
@@ -161,6 +172,10 @@ namespace ConsoleApp6
         }
         static void PlayOnMap(ref char[,] map, int playerX, int playerY)
         {
+            char wallSymbol = '#';
+            char playerSymbol = '@';
+            string exitKeyInMenu = "1";
+            char deletePlayerSymbol = ' ';
             int playerMoveX = 0;
             int playerMoveY = 0;
             bool playOnMap = true;
@@ -169,7 +184,7 @@ namespace ConsoleApp6
             DrawMap(map);
 
             Console.SetCursorPosition(0, map.GetLength(0) + 1);
-            Console.WriteLine("Для выхода нажмите - 1");
+            Console.WriteLine($"Для выхода нажмите - {exitKeyInMenu}");
 
             while (playOnMap == true)
             {
@@ -200,16 +215,16 @@ namespace ConsoleApp6
                             break;
                     }
 
-                    if (map[playerX + playerMoveX, playerY + playerMoveY] != '#')
+                    if (map[playerX + playerMoveX, playerY + playerMoveY] != wallSymbol)
                     {
                         Console.SetCursorPosition(playerY, playerX);
-                        Console.Write(" ");
+                        Console.Write(deletePlayerSymbol);
 
                         playerX += playerMoveX;
                         playerY += playerMoveY;
 
                         Console.SetCursorPosition(playerY, playerX);
-                        Console.Write("@");
+                        Console.Write(playerSymbol);
                     }
                 }
             }
