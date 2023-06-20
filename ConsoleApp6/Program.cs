@@ -17,13 +17,13 @@ namespace ConsoleApp6
             string editKeyInMenu = "1";
             string gameKeyInMenu = "2";
             string exitKeyInMenu = "3";
-            bool programwork = true;
+            bool isProgramWork = true;
             int playerX;
             int playerY;
 
             char[,] map = ReadMap("map1", out playerX, out playerY); 
 
-            while (programwork == true)
+            while (isProgramWork == true)
             {
                 Console.Clear();
                 Console.WriteLine($"{editKeyInMenu} - Редактирование");
@@ -34,18 +34,21 @@ namespace ConsoleApp6
                 switch (consoleKeyInfo.Key)
                 {
                     case ConsoleKey.D1:
-                        ModifiMap(ref map, ref playerX, ref playerY);
 
+                        ModifiMap(ref map, ref playerX, ref playerY);
                         break;
+
                     case ConsoleKey.D2:
-                        PlayOnMap(ref map, playerX, playerY);
+
+                        PlayOnMap(map, playerX, playerY);
                         break;
+
                     case ConsoleKey.D3:
-                        programwork = false;
+
+                        isProgramWork = false;
                         break;
                 }
             }
-
         }
 
         static char[,] ReadMap(string mapName, out int playerX, out int playerY)
@@ -69,6 +72,7 @@ namespace ConsoleApp6
                     }
                 }
             }
+
             return map;
         }
 
@@ -80,9 +84,11 @@ namespace ConsoleApp6
                 {
                     Console.Write(map[i, j]);
                 }
+
                 Console.WriteLine();
             }
         }
+
         static void ModifiMap( ref char[,] map, ref int playerX, ref int playerY)
         {
             string wallKeylInMenu  = "1";
@@ -97,12 +103,12 @@ namespace ConsoleApp6
             char playerSymbol = '@';
             char emptySymbol = ' ';
 
-            bool modifiMap = true;
+            bool isModifiMap = true;
             int cursorPositionX = 0;
             int cursorPositionY = 0;
 
 
-            while (modifiMap == true)
+            while (isModifiMap == true)
             {
                Console.Clear();
 
@@ -124,53 +130,74 @@ namespace ConsoleApp6
                 switch (consoleKeyInfo.Key)
                 {
                     case ConsoleKey.D1:
+
                         map[cursorPositionY, cursorPositionX] = wallSymbol; 
                         break;
+
                     case ConsoleKey.D2:
+
                         map[cursorPositionY, cursorPositionX] = playerSymbol;
                         playerX = cursorPositionX;
                         playerY = cursorPositionY;
                         break;
+
                     case ConsoleKey.D3:
+
                         map[cursorPositionY, cursorPositionX] = emptySymbol;
                         break;
+
                     case ConsoleKey.UpArrow:
+
                         if(cursorPositionY != 0)
                         {
                             cursorPositionY--;
                         }
+
                         Console.SetCursorPosition(cursorPositionX, cursorPositionY);
                         break;
+
                     case ConsoleKey.DownArrow:
+
                         if(cursorPositionY < map.GetLength(0) - 1)
                         {
                             cursorPositionY++;
                         }
+
                         Console.SetCursorPosition(cursorPositionX, cursorPositionY);
                         break;
+
                     case ConsoleKey.RightArrow:
+
                         if(cursorPositionX < map.GetLength(1) - 1)
                         {
                             cursorPositionX++;
                         }
+
                         Console.SetCursorPosition(cursorPositionX, cursorPositionY);
                         break;
+
                     case ConsoleKey.LeftArrow:
+
                         if(cursorPositionX != 0)
                         {
                             cursorPositionX--;
                         }
+
                         Console.SetCursorPosition(cursorPositionX, cursorPositionY);
                         break;
+
                     case ConsoleKey.D4:
-                        modifiMap = false;
+
+                        isModifiMap = false;
                         break;
                 }
             }
+
             Console.SetCursorPosition(0, 0);
             return;
         }
-        static void PlayOnMap(ref char[,] map, int playerX, int playerY)
+
+        static void PlayOnMap(char[,] map, int playerX, int playerY)
         {
             char wallSymbol = '#';
             char playerSymbol = '@';
@@ -178,7 +205,7 @@ namespace ConsoleApp6
             char deletePlayerSymbol = ' ';
             int playerMoveX = 0;
             int playerMoveY = 0;
-            bool playOnMap = true;
+            bool isPlayOnMap = true;
 
             Console.Clear();
             DrawMap(map);
@@ -186,7 +213,7 @@ namespace ConsoleApp6
             Console.SetCursorPosition(0, map.GetLength(0) + 1);
             Console.WriteLine($"Для выхода нажмите - {exitKeyInMenu}");
 
-            while (playOnMap == true)
+            while (isPlayOnMap == true)
             {
                 if (Console.KeyAvailable)
                 {
@@ -198,36 +225,44 @@ namespace ConsoleApp6
                             playerMoveX = -1;
                             playerMoveY = 0;
                             break;
+
                         case ConsoleKey.DownArrow:
                             playerMoveX = 1;
                             playerMoveY = 0;
                             break;
+
                         case ConsoleKey.LeftArrow:
                             playerMoveX = 0;
                             playerMoveY = -1;
                             break;
+
                         case ConsoleKey.RightArrow:
                             playerMoveX = 0;
                             playerMoveY = 1;
                             break;
+
                         case ConsoleKey.D1:
-                            playOnMap = false;
+                            isPlayOnMap = false;
                             break;
                     }
 
                     if (map[playerX + playerMoveX, playerY + playerMoveY] != wallSymbol)
                     {
-                        Console.SetCursorPosition(playerY, playerX);
-                        Console.Write(deletePlayerSymbol);
+                        DrawSymbol(deletePlayerSymbol, playerY, playerX);
 
                         playerX += playerMoveX;
                         playerY += playerMoveY;
 
-                        Console.SetCursorPosition(playerY, playerX);
-                        Console.Write(playerSymbol);
+                        DrawSymbol(playerSymbol, playerY, playerX);
                     }
                 }
             }
+        }
+
+        static void DrawSymbol(char symbol, int playerY, int playerX)
+        {
+            Console.SetCursorPosition(playerY, playerX);
+            Console.Write(symbol);
         }
     }   
 }
