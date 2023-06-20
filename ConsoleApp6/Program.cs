@@ -13,10 +13,10 @@ namespace ConsoleApp6
     internal class Program
     {
         static void Main(string[] args)
-        {
-            string editKeyInMenu = "1";
-            string gameKeyInMenu = "2";
-            string exitKeyInMenu = "3";
+        {            
+            const ConsoleKey editKeyInMenu = ConsoleKey.D1;
+            const ConsoleKey gameKeyInMenu = ConsoleKey.D2;
+            const ConsoleKey exitKeyInMenu = ConsoleKey.D3;
             bool isProgramWork = true;
             int playerX;
             int playerY;
@@ -33,18 +33,15 @@ namespace ConsoleApp6
 
                 switch (consoleKeyInfo.Key)
                 {
-                    case ConsoleKey.D1:
-
+                    case editKeyInMenu:
                         ModifiMap(ref map, ref playerX, ref playerY);
                         break;
 
-                    case ConsoleKey.D2:
-
+                    case gameKeyInMenu:
                         PlayOnMap(map, playerX, playerY);
                         break;
 
-                    case ConsoleKey.D3:
-
+                    case exitKeyInMenu:
                         isProgramWork = false;
                         break;
                 }
@@ -102,16 +99,13 @@ namespace ConsoleApp6
             char wallSymbol = '#';
             char playerSymbol = '@';
             char emptySymbol = ' ';
-
-            bool isModifiMap = true;
+            bool isModifyMap = true;
             int cursorPositionX = 0;
             int cursorPositionY = 0;
 
-
-            while (isModifiMap == true)
+            while (isModifyMap == true)
             {
                Console.Clear();
-
                 DrawMap(map);
 
                 Console.SetCursorPosition(0, map.GetLength(0) + 1);
@@ -130,19 +124,16 @@ namespace ConsoleApp6
                 switch (consoleKeyInfo.Key)
                 {
                     case ConsoleKey.D1:
-
                         map[cursorPositionY, cursorPositionX] = wallSymbol; 
                         break;
 
                     case ConsoleKey.D2:
-
                         map[cursorPositionY, cursorPositionX] = playerSymbol;
                         playerX = cursorPositionX;
                         playerY = cursorPositionY;
                         break;
 
                     case ConsoleKey.D3:
-
                         map[cursorPositionY, cursorPositionX] = emptySymbol;
                         break;
 
@@ -188,7 +179,7 @@ namespace ConsoleApp6
 
                     case ConsoleKey.D4:
 
-                        isModifiMap = false;
+                        isModifyMap = false;
                         break;
                 }
             }
@@ -219,32 +210,7 @@ namespace ConsoleApp6
                 {
                     ConsoleKeyInfo key = Console.ReadKey(true);
 
-                    switch (key.Key)
-                    {
-                        case ConsoleKey.UpArrow:
-                            playerMoveX = -1;
-                            playerMoveY = 0;
-                            break;
-
-                        case ConsoleKey.DownArrow:
-                            playerMoveX = 1;
-                            playerMoveY = 0;
-                            break;
-
-                        case ConsoleKey.LeftArrow:
-                            playerMoveX = 0;
-                            playerMoveY = -1;
-                            break;
-
-                        case ConsoleKey.RightArrow:
-                            playerMoveX = 0;
-                            playerMoveY = 1;
-                            break;
-
-                        case ConsoleKey.D1:
-                            isPlayOnMap = false;
-                            break;
-                    }
+                    MoveCursor(key, ref playerMoveX, ref playerMoveY, ref isPlayOnMap);
 
                     if (map[playerX + playerMoveX, playerY + playerMoveY] != wallSymbol)
                     {
@@ -263,6 +229,36 @@ namespace ConsoleApp6
         {
             Console.SetCursorPosition(playerY, playerX);
             Console.Write(symbol);
+        }
+
+        static void MoveCursor(ConsoleKeyInfo key, ref int playerMoveX, ref int playerMoveY, ref bool isPlayOnMap)
+        {
+            switch (key.Key)
+            {
+                case ConsoleKey.UpArrow:
+                    playerMoveX = -1;
+                    playerMoveY = 0;
+                    break;
+
+                case ConsoleKey.DownArrow:
+                    playerMoveX = 1;
+                    playerMoveY = 0;
+                    break;
+
+                case ConsoleKey.LeftArrow:
+                    playerMoveX = 0;
+                    playerMoveY = -1;
+                    break;
+
+                case ConsoleKey.RightArrow:
+                    playerMoveX = 0;
+                    playerMoveY = 1;
+                    break;
+
+                case ConsoleKey.D1:
+                    isPlayOnMap = false;
+                    break;
+            }
         }
     }   
 }
