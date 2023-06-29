@@ -242,28 +242,28 @@ namespace ConsoleApp6
 
         static void MoveCursor(ConsoleKey key , char[,] map, ref int cursorPositionX, ref int cursorPositionY)
         {
-            if (key.Key == ConsoleKey.LeftArrow)
+            if (key == ConsoleKey.LeftArrow)
             {
                 if (cursorPositionX != 0)
                 {
                     cursorPositionX--;
                 }
             }
-            else if (key.Key == ConsoleKey.RightArrow)
+            else if (key == ConsoleKey.RightArrow)
             {
                 if (cursorPositionX < map.GetLength(1) - 1)
                 {
                     cursorPositionX++;
                 }
             }
-            else if (key.Key == ConsoleKey.DownArrow)
+            else if (key == ConsoleKey.DownArrow)
             {
                 if (cursorPositionY < map.GetLength(0) - 1)
                 {
                     cursorPositionY++;
                 }
             }
-            else if (key.Key == ConsoleKey.UpArrow)
+            else if (key == ConsoleKey.UpArrow)
             {
                 if (cursorPositionY != 0)
                 {
