@@ -87,7 +87,7 @@ namespace ConsoleApp6
             }
         }
 
-        static void ModifyMap( ref char[,] map, ref int playerX, ref int playerY)
+        static void ModifyMap( ref char[,] map, ref int playerMapPositionOnX, ref int playerMapPositionOnY)
         {
             const ConsoleKey DrawWallKeyInMenu = ConsoleKey.D1;
             const ConsoleKey DrawPlayerKeyInMenu = ConsoleKey.D2;
@@ -128,15 +128,15 @@ namespace ConsoleApp6
                 switch (consoleKeyInfo.Key)
                 {
                     case DrawWallKeyInMenu:
-                        DrawSymbol(wallSymbol, cursorPositionOnMapY, cursorPositionOnMapX); 
+                        DrawSymbol(ref map, wallSymbol, cursorPositionOnMapY, cursorPositionOnMapX); 
                         break;
 
                     case DrawPlayerKeyInMenu:
-                        DrawSymbol(playerSymbol, cursorPositionOnMapY, cursorPositionOnMapX);
+                        DrawPlayer(ref map, playerSymbol, cursorPositionOnMapY, cursorPositionOnMapX, ref playerMapPositionOnY, ref playerMapPositionOnX);
                         break;
 
                     case DeleteKeyInMenu:
-                        DrawSymbol(emptySymbol, cursorPositionOnMapY, cursorPositionOnMapX);
+                        DrawSymbol(ref map, emptySymbol, cursorPositionOnMapY, cursorPositionOnMapX);
                         break;
 
                     case ConsoleKey.UpArrow:
@@ -206,6 +206,18 @@ namespace ConsoleApp6
         {
             Console.SetCursorPosition(playerY, playerX);
             Console.Write(symbol);
+        }
+
+        static void DrawSymbol(ref char[,] map, char symbol, int cursorPositionOnMapY, int cursorPositionOnMapX)
+        {
+            map[cursorPositionOnMapY, cursorPositionOnMapX] = symbol;
+        }
+
+        static void DrawPlayer(ref char[,] map, char symbol, int cursorPositionOnMapY, int cursorPositionOnMapX, ref int playerMapPositionOnX, ref int playerMapPositionOnY)
+        {
+            map[cursorPositionOnMapY, cursorPositionOnMapX] = symbol;
+            playerMapPositionOnX = cursorPositionOnMapX;
+            playerMapPositionOnY = cursorPositionOnMapY;
         }
 
         static void GetDirection(ConsoleKeyInfo key, ref int playerMoveX, ref int playerMoveY, ref bool isPlayOnMap)
