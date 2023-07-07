@@ -19,10 +19,10 @@ namespace ConsoleApp6
             const ConsoleKey ExitKeyInMenu = ConsoleKey.D3;
 
             bool isProgramWork = true;
-            int playerX;
-            int playerY;
+            int playerMapPositionOnX;
+            int playerMapPositionOnY;
 
-            char[,] map = ReadMap("map1", out playerX, out playerY); 
+            char[,] map = ReadMap("map1", out playerMapPositionOnX, out playerMapPositionOnY); 
 
             while (isProgramWork == true)
             {
@@ -35,11 +35,11 @@ namespace ConsoleApp6
                 switch (consoleKeyInfo.Key)
                 {
                     case EditKeyInMenu:
-                        ModifyMap(ref map, ref playerX, ref playerY);
+                        ModifyMap(ref map, ref playerMapPositionOnX, ref playerMapPositionOnY);
                         break;
 
                     case GameKeyInMenu:
-                        PlayOnMap(map, playerX, playerY);
+                        PlayOnMap(map, playerMapPositionOnX, playerMapPositionOnY);
                         break;
 
                     case ExitKeyInMenu:
@@ -92,7 +92,7 @@ namespace ConsoleApp6
             const ConsoleKey DrawWallKeyInMenu = ConsoleKey.D1;
             const ConsoleKey DrawPlayerKeyInMenu = ConsoleKey.D2;
             const ConsoleKey DeleteKeyInMenu = ConsoleKey.D3;
-            const ConsoleKey ExitKeyINMenu = ConsoleKey.D4;
+            const ConsoleKey ExitKeyInMenu = ConsoleKey.D4;
 
             string upMoveKeyInMenu = "стрелка вверх";
             string downMoveKeyInMenu = "стрелка вниз";
@@ -103,14 +103,14 @@ namespace ConsoleApp6
             char playerSymbol = '@';
             char emptySymbol = ' ';
             bool isModifyMap = true;
-            int cursorPositionX = 0;
-            int cursorPositionY = 0;
+            int cursorPositionOnMapX = 0;
+            int cursorPositionOnMapY = 0;
 
             while (isModifyMap == true)
             {
                Console.Clear();
                 DrawMap(map);
-                Console.SetCursorPosition(cursorPositionX, cursorPositionY);
+                Console.SetCursorPosition(cursorPositionOnMapX, cursorPositionOnMapY);
 
                 Console.SetCursorPosition(0, map.GetLength(0) + 1);
                 Console.WriteLine($"Для движения вверх   - {upMoveKeyInMenu}");
@@ -120,44 +120,42 @@ namespace ConsoleApp6
                 Console.WriteLine($"Нарисовать {wallSymbol}        - Введите   {DrawWallKeyInMenu}");
                 Console.WriteLine($"Нарисовать {playerSymbol}        - Введите   {DrawPlayerKeyInMenu}");
                 Console.WriteLine($"Стереть символ      - Введите   {DeleteKeyInMenu}");
-                Console.WriteLine($"Для выхода          - Введите   {ExitKeyINMenu}");
-                Console.SetCursorPosition(cursorPositionX, cursorPositionY);
+                Console.WriteLine($"Для выхода          - Введите   {ExitKeyInMenu}");
+                Console.SetCursorPosition(cursorPositionOnMapX, cursorPositionOnMapY);
 
                 ConsoleKeyInfo consoleKeyInfo = Console.ReadKey();
 
                 switch (consoleKeyInfo.Key)
                 {
                     case DrawWallKeyInMenu:
-                        DrawSymbol(wallSymbol, cursorPositionY, cursorPositionX); 
+                        DrawSymbol(wallSymbol, cursorPositionOnMapY, cursorPositionOnMapX); 
                         break;
 
                     case DrawPlayerKeyInMenu:
-                        DrawSymbol(playerSymbol, cursorPositionY, cursorPositionX);
+                        DrawSymbol(playerSymbol, cursorPositionOnMapY, cursorPositionOnMapX);
                         break;
 
                     case DeleteKeyInMenu:
-                        DrawSymbol(emptySymbol, cursorPositionY, cursorPositionX);
+                        DrawSymbol(emptySymbol, cursorPositionOnMapY, cursorPositionOnMapX);
                         break;
 
                     case ConsoleKey.UpArrow:
-
-                        MoveCursor(ConsoleKey.UpArrow, map, ref cursorPositionX, ref cursorPositionY);
+                        GetDirection(ConsoleKey.UpArrow, map, ref cursorPositionOnMapX, ref cursorPositionOnMapY);
                         break;
 
                     case ConsoleKey.DownArrow:
-                        MoveCursor(ConsoleKey.DownArrow, map, ref cursorPositionX, ref cursorPositionY);
+                        GetDirection(ConsoleKey.DownArrow, map, ref cursorPositionOnMapX, ref cursorPositionOnMapY);
                         break;
 
                     case ConsoleKey.RightArrow:
-                        MoveCursor(ConsoleKey.RightArrow, map, ref cursorPositionX, ref cursorPositionY);
+                        GetDirection(ConsoleKey.RightArrow, map, ref cursorPositionOnMapX, ref cursorPositionOnMapY);
                         break;
 
                     case ConsoleKey.LeftArrow:
-                        MoveCursor(ConsoleKey.LeftArrow, map, ref cursorPositionX, ref cursorPositionY);
+                        GetDirection(ConsoleKey.LeftArrow, map, ref cursorPositionOnMapX, ref cursorPositionOnMapY);
                         break;
 
-                    case ExitKeyINMenu:
-
+                    case ExitKeyInMenu:
                         isModifyMap = false;
                         break;
                 }
@@ -173,8 +171,8 @@ namespace ConsoleApp6
             char playerSymbol = '@';
             string exitKeyInMenu = "1";
             char deletePlayerSymbol = ' ';
-            int playerMoveX = 0;
-            int playerMoveY = 0;
+            int playerDirectionX = 0;
+            int playerDirectionY = 0;
             bool isPlayOnMap = true;
 
             Console.Clear();
@@ -189,14 +187,14 @@ namespace ConsoleApp6
                 {
                     ConsoleKeyInfo key = Console.ReadKey(true);
 
-                    MoveCursor(key, ref playerMoveX, ref playerMoveY, ref isPlayOnMap);
+                    GetDirection(key, ref playerDirectionX, ref playerDirectionY, ref isPlayOnMap);
 
-                    if (map[playerX + playerMoveX, playerY + playerMoveY] != wallSymbol)
+                    if (map[playerX + playerDirectionX, playerY + playerDirectionY] != wallSymbol)
                     {
                         DrawSymbol(deletePlayerSymbol, playerY, playerX);
 
-                        playerX += playerMoveX;
-                        playerY += playerMoveY;
+                        playerX += playerDirectionX;
+                        playerY += playerDirectionY;
 
                         DrawSymbol(playerSymbol, playerY, playerX);
                     }
@@ -210,37 +208,43 @@ namespace ConsoleApp6
             Console.Write(symbol);
         }
 
-        static void MoveCursor(ConsoleKeyInfo key, ref int playerMoveX, ref int playerMoveY, ref bool isPlayOnMap)
+        static void GetDirection(ConsoleKeyInfo key, ref int playerMoveX, ref int playerMoveY, ref bool isPlayOnMap)
         {
+            const ConsoleKey GetDirectionPlayerUp = ConsoleKey.UpArrow;
+            const ConsoleKey GetDirectionPlayerDown = ConsoleKey.DownArrow;
+            const ConsoleKey GetDirectionplayerLeft = ConsoleKey.LeftArrow;
+            const ConsoleKey GetDirectionPlayerRight = ConsoleKey.RightArrow;
+            const ConsoleKey IsPlayOnMap = ConsoleKey.D1;
+
             switch (key.Key)
             {
-                case ConsoleKey.UpArrow:
+                case GetDirectionPlayerUp:
                     playerMoveX = -1;
                     playerMoveY = 0;
                     break;
 
-                case ConsoleKey.DownArrow:
+                case GetDirectionPlayerDown:
                     playerMoveX = 1;
                     playerMoveY = 0;
                     break;
 
-                case ConsoleKey.LeftArrow:
+                case GetDirectionplayerLeft:
                     playerMoveX = 0;
                     playerMoveY = -1;
                     break;
 
-                case ConsoleKey.RightArrow:
+                case GetDirectionPlayerRight:
                     playerMoveX = 0;
                     playerMoveY = 1;
                     break;
 
-                case ConsoleKey.D1:
+                case IsPlayOnMap:
                     isPlayOnMap = false;
                     break;
             }
         }
 
-        static void MoveCursor(ConsoleKey key , char[,] map, ref int cursorPositionX, ref int cursorPositionY)
+        static void GetDirection(ConsoleKey key , char[,] map, ref int cursorPositionX, ref int cursorPositionY)
         {
             if (key == ConsoleKey.LeftArrow)
             {
